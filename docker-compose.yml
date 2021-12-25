@@ -1,0 +1,66 @@
+version: '3.9'
+
+services:
+  mongodb1:
+    image: mongo
+    restart: always
+    container_name: mongodb1
+    ports:
+      - '27017:27017'
+    volumes:
+      - './data/db1:/data/db'
+      - './mongo_key.sec:/mongo_key.sec'
+    command:
+      [ '--replSet', 'rs0', '--bind_ip_all', '--keyFile', '/mongo_key.sec' ]
+    user: root
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=1234
+      - MONGO_INITDB_DATABASE=admin
+
+  mongodb2:
+    image: mongo
+    restart: always
+    container_name: mongodb2
+    ports:
+      - '27018:27017'
+    volumes:
+      - './data/db2:/data/db'
+      - './mongo_key.sec:/mongo_key.sec'
+    command:
+      [ '--replSet', 'rs0', '--bind_ip_all', '--keyFile', '/mongo_key.sec' ]
+    user: root
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=1234
+      - MONGO_INITDB_DATABASE=admin
+
+  mongodb3:
+    image: mongo
+    restart: always
+    container_name: mongodb3
+    ports:
+      - '27019:27017'
+    volumes:
+      - './data/db3:/data/db'
+      - './mongo_key.sec:/mongo_key.sec'
+    command:
+      [ '--replSet', 'rs0', '--bind_ip_all', '--keyFile', '/mongo_key.sec' ]
+    user: root
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=1234
+      - MONGO_INITDB_DATABASE=admin
+
+  mongodb-init:
+    image: mongo
+    depends_on:
+      - mongodb1
+      - mongodb2
+      - mongodb3
+    restart: on-failure:5
+    command:
+      - mongo
+      - mongodb://admin:1234@192.168.80.244:27017/admin
+      - --eval
+      - 'rs.initiate({ _id: "rs0", members: [{_id:1,host:"192.168.80.244:27017"},{_id:2,host:"192.168.80.244:27018"},{_id:3,host:"192.168.80.244:27019"}]})'
