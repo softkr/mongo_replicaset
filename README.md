@@ -1,6 +1,6 @@
 # replicaset
 
-replicaset 도커이미지 만들기 이미지 만드는데 두가지 중요하다
+replicaset 도커이미지 만들기 이미지 만드는데 두가지 중요합니다.
 하나는 ip 주소 그리고 docker key 입니다.
 
 > 키생성방법
