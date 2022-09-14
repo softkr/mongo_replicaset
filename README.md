@@ -17,6 +17,14 @@ openssl rand -base64 756 > <path-to-keyfile> && chmod 400 <path-to-keyfile>
 chown systemd-coredump keyfile/mongo-cluster-ke
 ```
 
+에러발생시 
+"error":"Location5579201: Unable to acquire security key[s]
+
+ ```
+ chmod 600 mongo_key.sec
+ ```
+
+
 > mongodb-init
 
 이미지에 ip 주소를 세팅해야합니다.
